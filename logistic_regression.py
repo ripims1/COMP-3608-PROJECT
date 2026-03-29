@@ -85,7 +85,7 @@ for col in category_columns:
     if customers_in_category.sum() == 0:
         continue
     # Calculate what percentage of those customers churned
-    churn_rate = y_train[customers_in_category].mean() * 100
+    churn_rates[col] = y_train[customers_in_category].mean() * 100
 
 # Put results into a dataframe and sort highest to lowest
 churn_df = pd.DataFrame({
