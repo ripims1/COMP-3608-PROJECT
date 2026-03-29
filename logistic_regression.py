@@ -18,3 +18,17 @@ model.fit(X_train, y_train)
 predictions = model.predict_proba(testData)[:, 1] #predict_proba gives the probability of each class (churn or not churn) for each customer in the test set.
 print(predictions)
 
+# Plot the Histogram of Predicted Churn Probabilities
+threshold = 0.5 #This is the cutoff point we will use to classify customers as likely to churn (1) or not (0).
+
+plt.figure(figsize=(8, 5))
+plt.hist(predictions, bins=50, color='darkblue', edgecolor='black')
+plt.axvline(x=threshold, color='red', linestyle='--', label=f'Threshold ({threshold})')
+plt.title('Predicted Churn Probabilities')
+plt.xlabel('Probability of Churn')
+plt.ylabel('Count')
+plt.legend()  
+plt.tight_layout()
+plt.show()
+
+
