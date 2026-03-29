@@ -97,4 +97,25 @@ churn_df = churn_df.sort_values('ChurnRate', ascending=False).reset_index(drop=T
 # Calculate the overall churn rate to use as a reference line
 overall_churn_rate = y_train.mean() * 100
 
+# Colour each bar based on whether the churn rate is above or below the overall churn rate
+#Red = higher churn than average, Blue = lower churn than average
 
+bar_colors2 = []
+for rate in churn_df['ChurnRate']:
+    if rate > overall_churn_rate:
+        bar_colors2.append('Maroon')   # higher churn than average
+    else:
+        bar_colors2.append('darkblue') # lower churn than average
+
+# Plot the churn rate for each category with a bar chart, including a dashed line for the overall churn rate.
+plt.figure(figsize=(12, 7))
+plt.bar(churn_df['Category'], churn_df['ChurnRate'], color=bar_colors2, edgecolor='black')
+plt.axhline(y=overall_churn_rate, color='black', linestyle='--',
+            label=f'Overall Churn Rate ({overall_churn_rate:.1f}%)')
+plt.title('Churn Rate by Category')
+plt.ylabel('Churn Rate (%)')
+plt.xlabel('Category')
+plt.xticks(rotation=45, ha='right', fontsize=8)
+plt.legend()
+plt.tight_layout()
+plt.show()
