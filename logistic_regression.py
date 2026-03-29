@@ -85,7 +85,7 @@ for col in category_columns:
     if customers_in_category.sum() == 0:
         continue
     # Calculate what percentage of those customers churned
-    churn_rate = y_train[customers_in_category].mean() * 100
+    churn_rates[col] = y_train[customers_in_category].mean() * 100
 
 # Put results into a dataframe and sort highest to lowest
 churn_df = pd.DataFrame({
@@ -119,3 +119,30 @@ plt.xticks(rotation=45, ha='right', fontsize=8)
 plt.legend()
 plt.tight_layout()
 plt.show()
+
+#Changes the predictions of customer churn into submission file for Kaggle to match the format of the sample_submission.csv.
+#This submission only uses the Logistic Regression model's predictions.
+
+finalPredictions = model.predict(testData)
+originalTest = pd.read_csv('test.csv')
+# Create the submission file with two columns: the customer id and our churn prediction
+
+submission = pd.DataFrame({
+    'id': originalTest['id'],       # customer ids from the original test file
+    'Churn': finalPredictions        # our model's prediction for each customer (0 or 1)
+})
+
+# Sanity checks — just to make sure everything looks right before we submit
+# The total number of rows should match the number of customers in the test file
+print(f'Total rows: {len(submission)}')
+
+# This shows how many customers we predicted as churn (1) vs not churn (0)
+# If almost everything is 0 or almost everything is 1, something likely went wrong
+print(f'Churn value counts:\n{submission["Churn"].value_counts()}')
+
+# Save the submission as a csv file
+# index=False means we don't want pandas to add an extra column of row numbers (0, 1, 2, 3...)
+# Kaggle does not expect that column and it could cause the submission to be rejected
+submission.to_csv('submission.csv', index=False)
+
+print('submission.csv is saved and ready to upload to Kaggle!')
