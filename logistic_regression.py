@@ -65,5 +65,36 @@ plt.xlabel('Coefficient Value (red = more churn, blue = less churn)')
 plt.tight_layout()
 plt.show()
 
+# This section calculates the churn rate for each category in the dataset and visualizes it with a bar chart.
+
+numeric_columns = ['tenure', 'MonthlyCharges', 'TotalCharges'] # These are the numeric columns in the dataset that we will exclude when looking for category columns.
+
+# Find all the category columns (they only contain 0s and 1s)
+category_columns = []
+for col in X_train.columns:
+    if col not in numeric_columns and X_train[col].nunique() == 2:
+        category_columns.append(col)
+
+# For each category, calculate the churn rate of customers in that category
+churn_rates = {}
+for col in category_columns:
+    # Find all customers who belong to this category
+    customers_in_category = X_train[col] == 1
+
+    # Skip if no customers belong to this category
+    if customers_in_category.sum() == 0:
+        continue
+    # Calculate what percentage of those customers churned
+    churn_rate = y_train[customers_in_category].mean() * 100
+
+# Put results into a dataframe and sort highest to lowest
+churn_df = pd.DataFrame({
+    'Category': list(churn_rates.keys()),
+    'ChurnRate': list(churn_rates.values())
+})
+churn_df = churn_df.sort_values('ChurnRate', ascending=False).reset_index(drop=True)
+
+# Calculate the overall churn rate to use as a reference line
+overall_churn_rate = y_train.mean() * 100
 
 
