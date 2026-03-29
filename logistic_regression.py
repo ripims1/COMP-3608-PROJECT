@@ -132,7 +132,7 @@ submission = pd.DataFrame({
     'Churn': finalPredictions        # our model's prediction for each customer (0 or 1)
 })
 
-# Sanity checks — just to make sure everything looks right before we submit
+
 # The total number of rows should match the number of customers in the test file
 print(f'Total rows: {len(submission)}')
 
