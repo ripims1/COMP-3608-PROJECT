@@ -31,4 +31,39 @@ plt.legend()
 plt.tight_layout()
 plt.show()
 
+#Pulls the coefficients from the trained logistic regression model 
+# and identifies the top 15 features that have the most impact on predicting customer churn. 
+# It then creates a horizontal bar chart to visualize these features, coloring the bars red for 
+# features that increase churn risk and blue for those that decrease it.
+
+# Get the coefficient for each feature
+# Positive = increases churn risk, Negative = decreases churn risk
+coefficients = pd.Series(model.coef_[0], index=X_train.columns)
+
+# Sort by absolute value to find the most impactful features
+top15 = coefficients.abs().nlargest(15).index
+
+# Get the actual coefficient values for those top 15 features
+top15_coefs = coefficients[top15].sort_values()
+
+# Color the bars based on whether they increase or decrease churn
+#Red = increases churn risk (positive coefficient)
+#Blue = decreases churn risk (negative coefficient)
+bar_colors = []
+for value in top15_coefs:
+    if value > 0:
+        bar_colors.append('maroon')   # increases churn risk
+    else:
+        bar_colors.append('darkblue') # decreases churn risk
+
+# Plot the top 15 features with a horizontal bar chart
+plt.figure(figsize=(9, 6))
+plt.barh(top15_coefs.index, top15_coefs.values, color=bar_colors, edgecolor='black')
+plt.axvline(x=0, color='black', linestyle='--')
+plt.title('Top 15 Features That Influence Churn')
+plt.xlabel('Coefficient Value (red = more churn, blue = less churn)')
+plt.tight_layout()
+plt.show()
+
+
 
