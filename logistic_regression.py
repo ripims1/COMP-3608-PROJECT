@@ -11,8 +11,8 @@ X_train = trainData.drop('Churn', axis=1)   #contains all the columns the model 
 y_train = trainData['Churn'] #contains the target variable 'Churn' which indicates whether a customer churned (1) or not (0)
 
 # Train the logistic regression model
-#max_iter = 1000 to give the model enough iterations to find the best coefficients for all the features.
-model = LogisticRegression(max_iter=1000)
+#max_iter = 5000 to give the model enough iterations to find the best coefficients for all the features.
+model = LogisticRegression(max_iter=5000)
 model.fit(X_train, y_train)
 
 predictions = model.predict_proba(testData)[:, 1] #predict_proba gives the probability of each class (churn or not churn) for each customer in the test set.
@@ -132,7 +132,7 @@ submission = pd.DataFrame({
     'Churn': finalPredictions        # our model's prediction for each customer (0 or 1)
 })
 
-# Sanity checks — just to make sure everything looks right before we submit
+
 # The total number of rows should match the number of customers in the test file
 print(f'Total rows: {len(submission)}')
 
